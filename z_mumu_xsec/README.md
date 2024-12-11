@@ -58,7 +58,7 @@ w = \frac{\mathcal{L}_{\text{int}} \times \sigma}{n_{\text{events}}}.
 $$
 
 $$
-A = \frac{L \times \sigma}{n_{\text{events}}},
+A = \frac{\mathcal{L} \times \sigma}{n_{\text{events}}},
 $$
 
 
