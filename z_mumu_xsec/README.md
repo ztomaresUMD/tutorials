@@ -27,13 +27,13 @@ $$
 Thus, at FCCee, approximately 8500 $Z\rightarrow\mu\mu$ events are produced every second. The total number of events $n_{\text{tot}}$ can be computed using the integrated luminosity:
 
 $$
- n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 100\cdot 10^{6} \times 1717.85 = 1.72\cdot 10^{9}.
+n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 100\cdot 10^{6} \times 1717.85 = 1.72\cdot 10^{9}.
 $$
 
 At LEP, with an integrated luminosity of 44.84 pb$^{-1}$, the total number of events is:
 
 $$
- n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 44.84 \times 1717.85 = 77028.394.
+n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 44.84 \times 1717.85 = 77028.394.
 $$
 
 Clearly, the FCCee will produce far more $Z\rightarrow\mu\mu$ events than LEP!
@@ -54,7 +54,8 @@ Since the number of Monte Carlo events ($n_{\text{events}}$) is typically smalle
 Normalization ensures that histogram integrals reflect these aspects accurately. The normalization weight is computed as:
 
 $$
-w = \frac{\mathcal{L}_{\text{int}} \times \sigma}{n_{\text{events}}}.
+w = \frac{\mathcal{L}_{\text{int}}\times\sigma}{n_{\text{events}}}.
+A = \frac{n_{\text{selected}}}{n_{\text{total}}},
 $$
 
 
