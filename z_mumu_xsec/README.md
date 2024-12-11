@@ -54,14 +54,8 @@ Since the number of Monte Carlo events ($n_{\text{events}}$) is typically smalle
 Normalization ensures that histogram integrals reflect these aspects accurately. The normalization weight is computed as:
 
 $$
-w = \frac{\mathcal{L}_{\text{int}} \times \sigma}{n_{\text{events}}}.
+w = \frac{\mathcal{L}_{int} \times \sigma}{n_{\text{events}}}.
 $$
-
-$$
-A = \frac{\mathcal{L}_{\text{int}} \times \sigma}{n_{\text{events}}},
-$$
-
-
 
 
 
