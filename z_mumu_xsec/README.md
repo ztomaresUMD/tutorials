@@ -20,21 +20,21 @@ For example, at the Z-pole (91 GeV), the FCCee accelerator will achieve a lumino
 
 We calculate the $Z\rightarrow\mu\mu$ production rate $R$ (events per second) using a cross-section of 1717.85 pb (measured at LEP):
 
-$$
+```math
 R = \mathcal{L} \times \sigma = 5\cdot 10^{36} \times 1717.85\cdot 10^{-24} = 8589.25.
-$$
+```
 
 Thus, at FCCee, approximately 8500 $Z\rightarrow\mu\mu$ events are produced every second. The total number of events $n_{\text{tot}}$ can be computed using the integrated luminosity:
 
-$$
+```math
 n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 100\cdot 10^{6} \times 1717.85 = 1.72\cdot 10^{9}.
-$$
+```
 
 At LEP, with an integrated luminosity of 44.84 pb$^{-1}$, the total number of events is:
 
-$$
+```math
 n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 44.84 \times 1717.85 = 77028.394.
-$$
+```
 
 Clearly, the FCCee will produce far more $Z\rightarrow\mu\mu$ events than LEP!
 
@@ -53,9 +53,9 @@ Since the number of Monte Carlo events ($n_{\text{events}}$) is typically smalle
 
 Normalization ensures that histogram integrals reflect these aspects accurately. The normalization weight is computed as:
 
-$$
-w = \frac{\mathcal{L} \times \sigma}{n_{\text{events}}}.
-$$
+```math
+w = \frac{\mathcal{L}_{\text{int}} \times \sigma}{n_{\text{events}}}.
+```
 
 
 
@@ -160,9 +160,9 @@ python analysis.py --acceptance
 
 The calculated acceptance is `0.931`. This indicates that 93.1% of the total events are selected after detector effects and event selection. Scaling back the 71,744.33 selected events by the acceptance yields:
 
-$$
+```math
 \text{Adjusted events} = \frac{71,744.33}{0.931} = 77,061.57895,
-$$
+```
 
 which matches the initial number of generated events (modulo small numerical rounding).
 
@@ -184,9 +184,9 @@ These exercises will help quantify the precision of the acceptance calculation a
 
 With all the elements introduced so far, we can now measure the cross-section for the $Z \rightarrow \mu\mu$ process. The master formula is:
 
-$$
+```math
 \sigma = \frac{n_{\text{obs}} - n_{\text{bkg}}}{\epsilon \times A \times \mathcal{L}_{\text{int}}},
-$$
+```
 
 where:
 
