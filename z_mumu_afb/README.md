@@ -4,9 +4,10 @@ The vector and axial-vector components of the Z boson result in an asymmetric an
 
 The parameterization of the forward-backward asymmetry solely depends on the angles of both leptons with respect to the incoming particles (theta). One defines the angle $\cos(\theta_c)$ as follows:
 
-$$
+```math
 \cos\theta_c = \frac{\sin{(\theta_+-\theta_-)}}{\sin{\theta_+}+\sin{\theta_-}},
-$$
+```
+
 where $\theta_+$ and $\theta_-$ represent the polar angles of the positive and negative muons, respectively, measured in the lab frame. The angle $\theta_c$ is the scattering angle of the negative muon in the reduced center-of-mass frame of the muon pair, assuming that the initial state radiated photons have zero transverse momenta. The differential cross-section for muon pair production is given by:
 
 ```math
