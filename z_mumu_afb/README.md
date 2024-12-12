@@ -10,12 +10,15 @@ $$
 where $\theta_+$ and $\theta_-$ represent the polar angles of the positive and negative muons, respectively, measured in the lab frame. The angle $\theta_c$ is the scattering angle of the negative muon in the reduced center-of-mass frame of the muon pair, assuming that the initial state radiated photons have zero transverse momenta. The differential cross-section for muon pair production is given by:
 
 $$
-\frac{d\sigma(s)}{d\cos\theta_c} = \sigma(s) \times \left( \frac{3}{8}(1+\cos^2\theta_c) + A_{FB}(s) \cos\theta_c \right).
+`\frac{d\sigma(s)}{d\cos\theta_c} = \sigma(s) \times \left( \frac{3}{8}(1+\cos^2\theta_c) + A_{FB}(s) \cos\theta_c \right)`.
 $$
+
 The asymmetry is defined as the asymmetry of the $\cos\theta_c$ distribution:
+
 $$
-A_{FB} = \frac{\sigma_F - \sigma_B}{\sigma_F + \sigma_B} = \frac{N_F - N_B}{N_F + N_B},
+`A_{FB} = \frac{\sigma_F - \sigma_B}{\sigma_F + \sigma_B} = \frac{N_F - N_B}{N_F + N_B}`,
 $$
+
 with $N_F$ and $N_B$ the number of events counted in the forward and backward regions, respectively (corresponding to the number of events in the positive and negative sides of the $\cos\theta_c$ distribution).
 
 ## Analysis
