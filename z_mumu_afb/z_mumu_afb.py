@@ -6,15 +6,17 @@ ROOT.TH1.SetDefaultSumw2(ROOT.kTRUE)
 
 # list of all guns
 processList = {
+    'kkmcee_ee_mumu_ecm91p2': {'fraction':1},
     'wzp6_ee_mumu_ecm91p2': {'fraction':1},
-    'wzp6_ee_tautau_ecm91p2': {'fraction':1},
-    'p8_ee_gaga_mumu_ecm91p2': {'fraction':1},
+    'p8_ee_Zmumu_ecm91': {'fraction':1},
 }
 
 
 
 inputDir = "/ceph/submit/data/group/fcc/ee/generation/DelphesEvents/winter2023/IDEA/"
 procDict = "/ceph/submit/data/group/fcc/ee/generation/DelphesEvents/winter2023/IDEA/samplesDict.json"
+
+
 
 # additional/custom C++ functions
 includePaths = ["../functions/functions.h", "../functions/functions_gen.h"]
@@ -25,11 +27,11 @@ outputDir   = "output/"
 
 
 # optional: ncpus, default is 4, -1 uses all cores available
-nCPUS       = 128
+nCPUS       = 32
 
 # scale the histograms with the cross-section and integrated luminosity
-doScale = False
-intLumi = 1.0 # 44.84 pb-1 = LEP, 100e6=100 ab-1 = FCCee
+doScale = True
+intLumi = 1 # normalize to 1 pb-1
 
 # define histograms
 bins_p_mu = (20000, 0, 200) # 10 MeV bins
@@ -123,16 +125,64 @@ def build_graph(df, dataset):
     hists.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
 
 
-    ############################################################################
+    #########
+    ### CUT 5: acolinearity < 15 degrees
+    #########
     # acolinearity between 2 muons
     df = df.Define("acolinearity", "FCCAnalyses::acolinearity(muons)")
     hists.append(df.Histo1D(("acolinearity", "", *bins_aco), "acolinearity"))
+    df = df.Filter("acolinearity < 0.261799388")
 
+    df = df.Define("cut5", "5")
+    hists.append(df.Histo1D(("cutFlow", "", *bins_count), "cut5"))
+
+    ############################################################################
     # plot invariant mass of both muons
     df = df.Define("leps_tlv", "FCCAnalyses::makeLorentzVectors(muons)")
     df = df.Define("invariant_mass", "(leps_tlv[0]+leps_tlv[1]).M()")
     hists.append(df.Histo1D(("invariant_mass", "", *bins_m_ll), "invariant_mass"))
 
+
+    ## AFB
+    # calculate the angles (reco)
+    df = df.Define("theta_plus", "(muons_q[0] > 0) ? muons_theta[0] : muons_theta[1]")
+    df = df.Define("theta_minus", "(muons_q[0] < 0) ? muons_theta[0] : muons_theta[1]")
+    df = df.Define("cos_theta_plus", "cos(theta_plus)")
+    df = df.Define("cos_theta_minus", "cos(theta_minus)")
+    df = df.Define("cosThetac", "(sin(theta_plus-theta_minus))/(sin(theta_plus)+sin(theta_minus))")
+
+    hists.append(df.Histo1D(("theta_plus", "", *bins_theta), "theta_plus"))
+    hists.append(df.Histo1D(("theta_minus", "", *bins_theta), "theta_minus"))
+    hists.append(df.Histo1D(("cos_theta_plus", "", *bins_cos), "cos_theta_plus"))
+    hists.append(df.Histo1D(("cos_theta_minus", "", *bins_cos), "cos_theta_minus"))
+    hists.append(df.Histo1D(("cosThetac", "", *bins_cos), "cosThetac"))
+
+
+
+    # do gen-level analysis
+
+    # select the corresponding gen-level muons
+    df = df.Define("muons_gen", "FCCAnalyses::getRP2MC(muons, MCRecoAssociations0, MCRecoAssociations1, ReconstructedParticles, Particle)")
+    df = df.Define("muons_gen_tlv", "FCCAnalyses::makeLorentzVectors(muons_gen)")
+
+    df = df.Define("gen_muons_p", "FCCAnalyses::MCParticle::get_p(muons_gen)")
+    df = df.Define("gen_muons_theta", "FCCAnalyses::MCParticle::get_theta(muons_gen)")
+    df = df.Define("gen_muons_phi", "FCCAnalyses::MCParticle::get_phi(muons_gen)")
+    df = df.Define("gen_muons_no", "FCCAnalyses::MCParticle::get_n(muons_gen)")
+    df = df.Define("gen_muons_q", "FCCAnalyses::MCParticle::get_charge(muons_gen)")
+
+    # calculate the angles (gen)
+    df = df.Define("gen_theta_plus", "(gen_muons_q[0] > 0) ? gen_muons_theta[0] : gen_muons_theta[1]")
+    df = df.Define("gen_theta_minus", "(gen_muons_q[0] < 0) ? gen_muons_theta[0] : gen_muons_theta[1]")
+    df = df.Define("gen_cos_theta_plus", "cos(gen_theta_plus)")
+    df = df.Define("gen_cos_theta_minus", "cos(gen_theta_minus)")
+    df = df.Define("gen_cosThetac", "(sin(gen_theta_plus-gen_theta_minus))/(sin(gen_theta_plus)+sin(gen_theta_minus))")
+
+    hists.append(df.Histo1D(("gen_theta_plus", "", *bins_theta), "gen_theta_plus"))
+    hists.append(df.Histo1D(("gen_theta_minus", "", *bins_theta), "gen_theta_minus"))
+    hists.append(df.Histo1D(("gen_cos_theta_plus", "", *bins_cos), "gen_cos_theta_plus"))
+    hists.append(df.Histo1D(("gen_cos_theta_minus", "", *bins_cos), "gen_cos_theta_minus"))
+    hists.append(df.Histo1D(("gen_cosThetac", "", *bins_cos), "gen_cosThetac"))
 
 
     return hists, weightsum
