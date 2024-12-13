@@ -1,4 +1,4 @@
-# Introduction to Computing for High Energy Physics at MIT
+# Introduction to Computing for High Energy Physics, at MIT
 
 An introduction to the basic tools and software you will need for doing research in High Energy Physics (HEP). Some of this is MIT-specific, as we rely on our in-house cluster, subMIT. Please go through all the *Exercises* to make sure you understand the material.
 
@@ -16,7 +16,7 @@ You will do your work here from now on, rather than on your laptop (unless your 
 
 > *Exercise*: Log in to the subMIT cluster.
 
-> *Exercise*: Did you read the section "Login and basic areas"? This is important. Understand the difference between the home, work, and ceph directories.
+> *Exercise*: Please read the ["Getting started"](https://submit.mit.edu/submit-users-guide/starting.html) section, and any other sections you may find useful.
 
 ## The command line
 
@@ -44,6 +44,10 @@ Basic shortcuts:
 - `ctrl + r`: Search through previous commands.
 
 > *Exercise*: In your home space, create a new directory called `fcc-ee`, and navigate to it. Print the full path of your current directory.
+
+## JupyterHub
+
+You can also access subMIT via JupyterHub, which provides a web-based interface to the cluster. You can access JupyterHub [https://submit.mit.edu/jupyter](https://submit.mit.edu/jupyter). Documentation for this can be found [in the subMIT User's Guide](https://submit.mit.edu/submit-users-guide/access.html#jupyterhub).
 
 ## VS Code
 
@@ -79,6 +83,20 @@ As documented in the [subMIT User's Guide](https://submit.mit.edu/submit-users-g
 
 You can add your own .php files to your `public_html` directory to edit the style of your webpage.
 
+## FCCAnalyses Software
+
+The FCC collaboration has put together a common framework for analyses. You can find more information, tutorials, and documentation on their website [https://hep-fcc.github.io/FCCAnalyses/](https://hep-fcc.github.io/FCCAnalyses/). The code itself lives on GitHub, in the [FCCAnalyses repository](https://github.com/HEP-FCC/FCCAnalyses). 
+
+> *Exercise*: These are MIT-specific instructions for setting this up. Jan (MIT email: jaeyserm) has modified some of the software to work best on our subMIT cluster; you can find it in [his fork of the main repo](https://github.com/jeyserma/FCCAnalyses). You don't need to clone this yourself, as he has already cloned it on subMIT, so we can just use it from there. The way to do this is, upon logging in to subMIT, run the following command:
+    
+    source /work/submit/jaeyserm/software/FCCAnalyses/setup.sh
+
+>  What this does is to set up an environment for you. Namely, your shell now "knows" about the FCCAnalyses software, and you can use it. You can check that this worked by running the following command:
+
+    which python
+
+> This should return the path to the python executable that is part of the FCCAnalyses software. Something like `/cvmfs/sw.hsf.org/key4hep/releases/2024-03-10/x86_64-almalinux9-gcc11.3.1-opt/python/3.10.13-od343s/bin/python`. If it does, you are good to go.
+
 ## Conclusion
 
-If you've gone through everything here, you are now ready to start learning about the basics of 
+If you've gone through everything here, you are now ready to start learning about the basics of analysis and computing for HEP.
