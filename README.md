@@ -2,11 +2,12 @@
 
 A set of tutorials written to introduce students the topics of computing and analysis for high energy physics and FCC-ee software. The tutorials are of general interest, but specific examples and commands rely on MIT resources. 
 
-Authors: Jan Eysermans, Luca Lavezzo.
+Authors: Anja Beck, Jan Eysermans, Luca Lavezzo.
 
 **Table of contents**
-- `00_Intro`: Introudction to the basic tools and software you will need for doing research in High Energy Physics (HEP). How to set up your accounts, access to subMIT cluster, and environment.
-- `01_Basics`: Introduction to HEP computing basics, including data structures, ROOT, ROOT DataFrames, histograms, and plotting.
+- `00_Intro`: Introduction to the basic tools and software you will need for doing research in High Energy Physics (HEP). How to set up your accounts, access to subMIT cluster, and environment.
+- `01_Basics`: Introduction to HEP computing basics, including data structures, ROOT, histograms, and plotting.
+- `02_RDFs`: Introduction to ROOT DataFrames.
 - `z_mumu_xsec`
 - `z_mumu_afb`
 - `wmass`
