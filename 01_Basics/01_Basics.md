@@ -77,11 +77,17 @@ root [3] tree->Print();
 
 As you see, the `.root` file contains a `TTree` called `events`. This tree contains 1000 entries, or events, and each entry contains many branches. For example, we see one called `BuildUpVertices`. This branch contains an array of integers, which is the number of vertices for each event.
 
-## ROOT
+> *Exercise:* Do this yourself.
+
+> *Hint:* did you set up your environment?
+
+## ROOT and Analysis Concepts
 
 ROOT is CERN's data analysis framework built for C++ and Python (PyROOT), and provides the backbone for the code you will be running. CERN provides a [good primer](https://root.cern.ch/root/htmldoc/guides/primer/ROOTPrimer.html#root-in-python), which covers all the basics.
 
-Here is a simple script to read in a `.root` file, and print information about the MC particles of the first 10 events,
+A typical analysis code will **loop through the various events**, and perform analysis on the objects in each event. **Selections (or filters, or vetos)** are criteria that are applied to select particular objects, or events. Results are either skimmed and processed versions of the original events, or histograms containing information about rates of certain processes.
+
+Here is a simple script to read in a `.root` file, loop through 10 events,print information about the MC particles of these events, apply a selection on the MC particle energy, and fill a histogram with the energies of the particles.
 
 ``` python
 import ROOT
@@ -144,11 +150,29 @@ file_out.Close()
 print("All done!")
 ```
 
+In pseudocode, this script does the following,
+
+```
+file = open .root file
+tree = get the tree from the file
+
+for event in first 10 events:
+
+    for particle in MC particles:
+        
+        print information about the particle
+        
+        calculate the energy of the particle
+
+        if the energy is greater than 10 GeV:
+            fill the histogram with the energy
+```
+
+
 > *Exercise:* Copy this script into a python file and run it with,
   ``` sh 
   python script.py
   ```
-> *Hint:* If it fails, did you set up your environment?
 
 Two files will be created: `energy.png` and `output.root`. The first is a plot of the canvas, with the histogram of the energies, which is great for visualizing. The second is a `.root` file containing the information stored in the histogram, which is useful for storing, and reading back into a script for further analysis.
 
@@ -169,7 +193,7 @@ These rates, i.e. how often you expect to get two muons out of the collisions, a
 Measuring these cross sections allows us to compare our theory with experiment.
 
 Cross sections are often parametrized as functions of the outgoing particle momenta or angles: you will often see things like $d\sigma(e^+ e^- \to \mu^+ \mu^-)/d\cos\theta dp$.
-In simple words, these are predictions for how often you expect to see a muon produced with a particular momentum $p$ and angle $\theta$ from $ee$ collisions with a specific center-of-mass energy.
+In simple words, this is a prediction for how often you expect to see a muon produced with a particular momentum $p$ and angle $\theta$ from $ee$ collisions with a specific center-of-mass energy.
 These parametrizations can give us access to more information about the underlying structure of the theory, as you will learn about.
 
 Histograms measure the *frequency* of events in *bins* of certain *variables(s)*.
@@ -199,7 +223,7 @@ However, this is not the case in general! For some analyses (e.g. flavour physic
 
 As you saw in the example script, we can make histograms by looping over the collision events, and counting how many events fall into each bin for a specific variable.
 To do so, we used ROOT's `TH1D`, which is a 1D histogram; are also `TH2D`, `TH3D`, etc., for 2D and 3D histograms.
-You can also use `numpy`, `pandas`, `hist` (suggested), and other python libraries to make histograms.
+You can also use `numpy`, `pandas`, `hist` (suggested), and other python libraries to make, manipulate, and plot histograms.
 
 In our example, we stored the histogram in a `.root` file.
 Let's open this up, and read in the histogram.
