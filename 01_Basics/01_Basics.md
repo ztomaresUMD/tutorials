@@ -283,9 +283,7 @@ fig.savefig("pretty_energy.pdf", bbox_inches="tight")
 
 > *Exercise*: Run this as a script or a notebook.
 
-> *Exercise*: In the same python script, initialize a new histogram using `hist`, with the same binning as the invariant mass histogram. Fill this histogram with a random sample of 1000 events from a falling exponential distribution with $\beta = 50$. Plot this histogram *stacked* with the $ee\to\mu\mu$ histogram from earlier.
-
-> *Hint*: `hist`'s [docs](https://hist.readthedocs.io/en/latest/) will be useful. You can use `numpy` to generate the random sample.
+> *Exercise*: Plot the histogram of the invariant mass. Make sure to select a nice x-range to center around the area of interest. Add a dashed black line at the value of $m_Z$, and put it in the legend.
 
 # Conclusion
 

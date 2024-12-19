@@ -99,7 +99,7 @@ c.Draw()
 c.SaveAs("energy.png")
 ```
 
-> *Exercise*: Write the same analysis to extract the invariant mass of the dimuon system using RDFs. The result should be exactly the same! Try running over more events, and note the speed between the simple `for` loop and RDFs.
+> *Exercise*: run this script, and produce the energy histogram. How does it compare with the one from the previous tutorial? Write the analysis to extract the invariant mass of the dimuon system using RDFs. Try running over more events, and note the speed between the simple `for` loop and RDFs.
 
 # Pandas
 
