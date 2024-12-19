@@ -229,7 +229,7 @@ In our example, we stored the histogram in a `.root` file.
 Let's open this up, and read in the histogram.
 There are existing and strong personal preferences for which tools you like to use to do this type of analysis: we will introduce you to using python with `hist` and `maplotlib` to work with histograms and plot them, but you are free to play around with other tools you may be more familiar with!
 
-The following python code walks you through the basics of reading in a histogram using `uproot`, and plotting it using `matplotlib` and `mplhep`.
+The python code walks you through the basics of reading in a histogram using `uproot`, and plotting it using `matplotlib` and `mplhep`.
 
 ``` python
 import uproot
@@ -270,8 +270,7 @@ hep.histplot(h, label="$e^+e^-\\to\mu^+\mu^-$", ax=ax)
 ax.set_ylabel("Events")
 ax.legend(loc=(1.01, 0), fontsize='x-small')
 ax.set_yscale("log")
-ax.set_xlabel("$m_{\mu^+\mu^-}$ [GeV]")
-ax.set_xlim(50, 140)
+ax.set_xlabel("$E$ [GeV]")
 
 # the finishing touch, add the experiment label!
 # for now setting the luminosity to 1 as an example, since we didn't do any normalization
@@ -279,7 +278,7 @@ hep.label.exp_label(exp="FCC-ee", ax=ax, lumi=1, data=False, com=240)
 
 # let's save this to a file
 # (the bbox_inches="tight" makes sure the labels are not cut off)
-fig.savefig("pretty_invariant_mass.pdf", bbox_inches="tight")
+fig.savefig("pretty_energy.pdf", bbox_inches="tight")
 ```
 
 > *Exercise*: Run this as a script or a notebook.
