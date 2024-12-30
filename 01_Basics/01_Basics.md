@@ -229,12 +229,22 @@ In our example, we stored the histogram in a `.root` file.
 Let's open this up, and read in the histogram.
 There are existing and strong personal preferences for which tools you like to use to do this type of analysis: we will introduce you to using python with `hist` and `maplotlib` to work with histograms and plot them, but you are free to play around with other tools you may be more familiar with!
 
-The python code walks you through the basics of reading in a histogram using `uproot`, and plotting it using `matplotlib` and `mplhep`.
+The python code walks you through the basics of reading in a histogram using `uproot`, maniupalating it with `hist`, and plotting it using `matplotlib` and `mplhep`. To install these, after activating the FCC-ee environment as usual, run
+
+``` bash
+
+pip install --user hist mplhep
+
+```
+
+### Reading in a histogram with `uproot`
+
+The following code demonstrates how to read a `.root` file into a python script using `uproot`.
 
 ``` python
 import uproot
 
-# open the .root file containing histograms (change this to read the file you created earlier!)
+# open a .root file containing histograms
 file = uproot.open("output.root")
 
 # print the contents of the file
@@ -245,28 +255,153 @@ h = file["h"]
 
 # this shold be a TH1D object, since we created it with ROOT
 print(h)
+```
 
+### `hist` and histogram objects
+
+`hist` is a powerful library that defines histogram *objects*.
+You can read through [some of their documentation](https://hist.readthedocs.io/en/latest/) for more information.
+
+We can convert the `uproot` histogram to a `hist` one via `.to_hist()`.
+
+``` python
 import hist
 
-# let's convert it to hist
+# let's convert the uproot obeject it to hist histogram
 h = h.to_hist()
-print(h)
 
+# print the hist object
+print(h)
+```
+
+But we can also create new histograms easily with `hist`.
+
+Here, we initialize two histograms. The first has one axis, for the momentum, with a label that will show up nicely when plotted as "$p$ [GeV]", with one hundred bins going from 0 to 200. The second histogram is two dimensional, i.e has two axes: one for momenutm of the particle, one for the azimuthal angle of the particle.
+
+``` python
+h1D = hist.Hist.new.Reg(100, 0, 200, name="momentum", label="$p$ [GeV]").Weight()
+h2D = hist.Hist.new.Reg(100, 0, 200, name="momentum", label="$p$ [GeV]").Reg(100, 0, 6.28, name="phi", label="$\phi$").Weight()
+```
+
+We can fill these histograms with some data. For the two dimensional histogram, we have to fill the values in all dimensions, so that for each event we need to specify a value for both momentum and angle.
+
+For one event, filling looks like the following,
+
+``` python
+h1D.fill(100) # this means: we count one event with 100 GeV of energy
+h2D.fill(130, 1.4) # this means: we count one event with 130 GeV of energy, angle angle of 1.4 
+```
+
+If you have data for, say, 10000 particles and don't want to fill the histogram one by one, you don't have to.
+Do as follows,
+
+``` python
+import numpy as np
+
+# generate some fake data: 10000 events with Gaussian-distributed energy peaked at 50 with variance 10, and unfiromly-distributed azimuthal angle
+energies = np.random.normal(size=10000, loc=50, scale=10)
+angles = np.random.uniform(size=10000, low=0, high=6.28)
+
+# fill histograms
+h1D.fill(energies)
+h2D.fill(energies, angles)
+```
+
+Now that we know how to read in or create new histograms, as well as fill them, we can see what type of information they contain.
+
+For each axis, we can recover the bin edges, name, label (all the stuff we initialized them with, of course!), and for the histogram itself, we can recover the event counts.
+
+``` python
+centers_1D = h1D.axes[0].centers
+edges_1D = h1D.axes[0].edges
+counts_1D = h1D.values()
+uncert_1D = np.sqrt(h1D.variances())
+
+print("1D histogram bin centers", centers_1D)
+print("1D histogram bin edges", edges_1D)
+print("1D histogram counts", counts_1D)
+print("1D histogram uncertanties", uncert_1D)
+```
+
+For multidimensional histograms, the story is the same, we just have multiple axes that we can get information about. Note that the values of the histogram are now multidimensional, since we have information about each of the multiple axes. 
+
+``` python
+edges_2D_axis0 = h1D.axes[0].edges
+edges_2D_axis1 = h1D.axes[1].edges
+counts_2D = h2D.values()
+uncert_2D = np.sqrt(h2D.variances())
+
+print("2D histogram bin edges of axis 0", edges_2D_axis0)
+print("2D histogram bin edges of axis 1", edges_2D_axis1)
+print("2D histogram counts", counts_2D)
+print("2D histogram uncertanties", uncert_2D)
+```
+
+Similiar to `numpy` arrays, we can *slice* along different axes.
+You can use integers to indicate *bin numbers* and complex numbers (denoted in python using `j`) to indicate *bin values*.
+
+For example,
+
+```python
+print(h1D[0.0j:100.0j]) # returns a new histogram, which is the old histogram with only bins between 0 and 100.
+print(h1D[0:100]) # returns a new histogram, which is the old histogram with only the first 100 bins.
+```
+
+We can sum along any axis via `::sum`.
+In this snippet, the first line integrates along the whole first axis, while the second line integrates from 100 GeV onwards.
+
+``` python
+n_total = h1D[::sum]
+n_above_100gev = h1D[100j::sum]
+```
+
+For histograms with many axes, you can still slice along each of the axes independently,
+
+```python
+h2D[10j:50j, 0.0j:3.14j] # slice between 10 and 50 GeV in energy, and 0 to 3.14 in phi
+```
+
+### Plotting histograms with `mplhep` and `matplotlib`
+
+If you haven't used `matplotlib` yet, good thing you're here now.
+It's a very widely used library for plotting in python, and you will find it everywhere in academia and the industry.
+The internet and LLMs are filled with great information about any question you might have about this library.
+
+`mplhep` is a wrapper around `matplotlib`, providing some neat functions and styles for out-of-the-box plotting of histograms that look publication-ready, and conform to the traditional HEP styles.
+
+Let's look at the styles.
+You cain initialize these at the beginning of your script.
+You can do this for both `mplhep` and for `matplotlib`.
+Hereafter, your plotting with either of these libraries will have some nice presets.
+
+``` python
 import matplotlib.pyplot as plt
 import mplhep as hep 
 
-# tjese set the default style of the plotting libraries to the CMS style
+# these set the default style of the plotting libraries to the CMS style
 hep.style.use("CMS")
 plt.style.use(hep.style.CMS)
+```
 
+When working in `matplotlib`, always initialize a new `Figure` object, onto which you add `subplots` (confusingly for you, these are also called *axes*).
+
+``` python
 # initialize a figure and axis using matplotlib
 fig = plt.figure()
 ax = fig.subplots()
+```
 
+Onto the axis, we can use `mplhep` to plot one of your favorite histograms.
+You should always add a nice *label*, which will show up once we create a legend.
+
+```python
 # use mplhep to plot the histogram on the axis, add a nice label
 hep.histplot(h, label="$e^+e^-\\to\mu^+\mu^-$", ax=ax)
+```
 
-# add some labels and a legend -- this is very very important!!
+Add some labels and a legend -- *this is very very important!!*
+
+```python
 ax.set_ylabel("Events")
 ax.legend(loc=(1.01, 0), fontsize='x-small')
 ax.set_yscale("log")
@@ -275,13 +410,16 @@ ax.set_xlabel("$E$ [GeV]")
 # the finishing touch, add the experiment label!
 # for now setting the luminosity to 1 as an example, since we didn't do any normalization
 hep.label.exp_label(exp="FCC-ee", ax=ax, lumi=1, data=False, com=240)
+```
 
-# let's save this to a file
+We can save your plot to a file.
+
+```python
 # (the bbox_inches="tight" makes sure the labels are not cut off)
 fig.savefig("pretty_energy.pdf", bbox_inches="tight")
 ```
 
-> *Exercise*: Run this as a script or a notebook.
+> *Exercise*: Put this code together, and run it as a script or a notebook, with the appropriate modifications, to plot one of the histograms you have created.
 
 > *Exercise*: Plot the histogram of the invariant mass. Make sure to select a nice x-range to center around the area of interest. Add a dashed black line at the value of $m_Z$, and put it in the legend.
 
