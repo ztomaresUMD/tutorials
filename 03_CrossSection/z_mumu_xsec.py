@@ -32,9 +32,9 @@ doScale = False
 intLumi = 1.0 # 44.84 pb-1 = LEP, 100e6=100 ab-1 = FCCee
 
 # define histograms
-bins_p_mu = (20000, 0, 200) # 10 MeV bins
-bins_m_ll = (20000, 0, 200) # 10 MeV bins
-bins_p_ll = (20000, 0, 200) # 10 MeV bins
+bins_p_mu = (200, 0, 200) # 1 GeV bins
+bins_m_ll = (200, 0, 200) # 1 GeV bins
+bins_p_ll = (200, 0, 200) # 1 GeV bins
 
 bins_theta = (500, -5, 5)
 bins_phi = (500, -5, 5)

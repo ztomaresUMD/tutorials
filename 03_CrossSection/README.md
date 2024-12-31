@@ -1,9 +1,10 @@
-
-
-
 # $Z\rightarrow\mu\mu$ Cross-Section at the Z-Pole
 
-In this tutorial, we will explore the fundamentals of event looping, normalization, histogram creation, and the extraction of a cross-section, using the simple process $Z \rightarrow \mu\mu$ at the Z-pole.
+In this tutorial, we will explore the fundamentals to measure the cross-section of the $Z \rightarrow \mu\mu$ process at the Z-pole. The analysis strategy and selection is based on previous measurements done at the CERN [Large Electron Positron collider (LEP)](https://en.wikipedia.org/wiki/Large_Electron%E2%80%93Positron_Collider). You can find more information in [this paper](https://link.springer.com/article/10.1007/s100520050001) about the measurement done by the [L3 Collaboration](https://en.wikipedia.org/wiki/L3_experiment), one of the 4 major experiments at LEP.
+
+
+
+
 
 
 ## Introduction and concepts
@@ -13,24 +14,24 @@ In this tutorial, we will explore the fundamentals of event looping, normalizati
 A comprehensive summary of cross-section and luminosity definitions can be found [here](https://cds.cern.ch/record/2800578/files/Cross%20Section%20and%20Luminosity%20Physics%20Cheat%20Sheet.pdf). To summarize:
 
 - **Cross-section**: A characteristic of the physical process, measured in units of picobarn (pb), where $1 \text{ barn} = 10^{-24} \text{ cm}^2$.
-- **Instantaneous luminosity** ($\mathcal{L}$): Represents the density of particles colliding in the accelerator. Units: pb$^{-1}$s$^{-1}$ or cm$^{-2}$s$^{-1}$.
-- **Integrated luminosity** ($\mathcal{L}_{\text{int}}$): The instantaneous luminosity integrated over time, with units of pb$^{-1}$. Typically, "luminosity" refers to integrated luminosity.
+- **Instantaneous luminosity** ($\mathcal{L}$): Represents the density of particles colliding in the accelerator. Units: $\text{pb}^{-1}$s$^{-1}$ or $\text{cm}^{-2}$s$^{-1}$.
+- **Integrated luminosity** ($\mathcal{L}_{\text{int}}$): The instantaneous luminosity integrated over time, with units of $\text{pb}^{-1}$. Typically, "luminosity" refers to integrated luminosity.
 
-For example, at the Z-pole (91 GeV), the FCCee accelerator will achieve a luminosity of $5\cdot 10^{36} \text{ cm}^{-2}\text{s}^{-1}$ and an integrated luminosity of approximately 100 ab$^{-1}$ (attobarn), corresponding to about two years of operation. In contrast, at LEP, the instantaneous and integrated luminosities were much lower, with the latter amounting to 44.84 pb$^{-1}$.
+For example, at the Z-pole (91 GeV), the FCCee accelerator will achieve a luminosity of $5\cdot 10^{36} \text{ cm}^{-2}\text{s}^{-1}$ and an integrated luminosity of approximately 100 $\text{ab}^{-1}$ (attobarn), corresponding to about two years of operation. In contrast, at LEP, the instantaneous and integrated luminosities were much lower, with the latter amounting to 44.84 $\text{pb}^{-1}$.
 
-We calculate the $Z\rightarrow\mu\mu$ production rate $R$ (events per second) using a cross-section of 1717.85 pb (measured at LEP):
+We calculate the $Z\rightarrow\mu\mu$ production rate $R$ (events per second) using a cross-section of 1717.85 pb (obtained from theoretical calulations and confirmed with measurements at LEP):
 
 ```math
 R = \mathcal{L} \times \sigma = 5\cdot 10^{36} \times 1717.85\cdot 10^{-24} = 8589.25.
 ```
 
-Thus, at FCCee, approximately 8500 $Z\rightarrow\mu\mu$ events are produced every second. The total number of events $n_{\text{tot}}$ can be computed using the integrated luminosity:
+Thus, at FCCee, approximately 8500 $Z\rightarrow\mu\mu$ events are produced every second! The total number of events $n_{\text{tot}}$ can be computed using the integrated luminosity:
 
 ```math
 n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 100\cdot 10^{6} \times 1717.85 = 1.72\cdot 10^{9}.
 ```
 
-At LEP, with an integrated luminosity of 44.84 pb$^{-1}$, the total number of events is:
+At LEP, with an integrated luminosity of 44.84 $\text{pb}^{-1}$, the total number of events is:
 
 ```math
 n_{\text{tot}} = \mathcal{L}_{\text{int}} \times \sigma = 44.84 \times 1717.85 = 77028.394.
@@ -64,32 +65,48 @@ w = \frac{\mathcal{L}_{\text{int}} \times \sigma}{n_{\text{events}}}.
 To perform the analysis, set up the environment and navigate to the `z_mumu_xsec` tutorial directory:
 
 ```shell
-source /work/submit/jaeyserm/software/FCCAnalyses/setup.sh # Only required once
-cd mit-fcc/tutorials/z_mumu_xsec
+cd mit-fcc/tutorials/03_CrossSection
+source /work/submit/jaeyserm/software/FCCAnalyses/setup.sh
 ```
 
-The samples, analysis logic, cuts, and histograms are defined in the `z_mumu_xsec.py` file. For this analysis, the signal sample is $Z \rightarrow \mu\mu$ (`wzp6_ee_mumu_ecm91p2`), and the backgrounds are `wzp6_ee_tautau_ecm91p2` and `p8_ee_gaga_mumu_ecm91p2` (refer to the lectures for processes and Feynman diagrams). The cuts applied are:
+The samples, analysis logic, cuts, and histograms are defined in the `z_mumu_xsec.py` file. For this analysis, the signal sample is $Z \rightarrow \mu\mu$ (`wzp6_ee_mumu_ecm91p2`), and the backgrounds are `wzp6_ee_tautau_ecm91p2` and `p8_ee_gaga_mumu_ecm91p2`. The terminology for the sample names is as follows: `wzp6` means the Whizard event generator coupled to Pythia 6 for the hadronisation; `ee` means electron-positron initial state; `mumu` means the acual process, i.e. 2 muons (see lectures for the different processes and Feynman diagrams that can occur at the Z pole) and `ecm91p2` is the center-of-mass energy of 91.2 GeV (the Z pole). `p8` means the Pythia 8 event generator and hadronisation. Other event generators are also available such as `KKMCee` or `MadGraph`.
+
+We'll adopt the following cuts, inspired by the reference paper above:
 
 - **Cut 1**: Select events with at least one muon.
 - **Cut 2**: Select events with at least two muons.
 - **Cut 3**: Select events with exactly two muons of opposite charge.
 - **Cut 4**: Require the highest momentum muon to have $p > 0.6$ of the beam energy.
 
-Run the analysis by looping over all events:
+These cuts are implemented in the file ```z_mumu_xsec.py```. Inspect the file and try to understand where the cuts are implemented.
+
+Run the analysis by looping over all events for all processes:
 
 ```shell
 fccanalysis run z_mumu_xsec.py
 ```
 
-This process may take some time, as all samples are loaded, and events are processed. Once complete, a ROOT file is generated for each process in the `output` directory, containing histograms. To plot the results, modify the `outdir` in the `plots.py` file to point to your web area, then execute:
+This may take some time, as all samples are loaded, and events are processed. Once complete, a ROOT file is generated for each process in the `output` directory, containing histograms. 
+
+We now proceed to plot the different histograms and try to understand the physics behind it. There are two ways for plotting: 1) a quick plotting tool in `ROOT` or 2) produce your own plots using `matplotlib` and `mpl4hep` (see tutorial 2). This first option is generally used to quickly produce some plots and check the outcome; but we recommed to be familiar with the second option to produce your own pretty plots.
+
+To plot using `ROOT`, open the `plots_root.py` file and modify the `outdir` to point to your web area (and make this directory), then execute:
 
 ```shell
 fccanalysis plots plots.py
 ```
 
-This generates several plots in the specified `outdir`. Inspect the `cutFlow` histogram, which shows stacked event yields for all processes across different cuts. After the final cut, there are approximately $10^8$ events (signal-dominated, with backgrounds included). However, this count does not align with our earlier calculation. Why?
+This generates several plots in the specified `outdir`. Open the plots in your web browser and have a look, and see how they are configured in the `plots_root.py` file. To plot them using the second option, an example is given in the `plots_mpl4hep.py` file (again, modify the `outDir` in the file to point to your web area):
 
-The discrepancy arises because event normalization has not been applied. The current counts are bare (non-normalized) yields. Event normalization involves considering the cross-section (tabulated as metadata with the sample), the number of events processed, and the integrated luminosity (set by the user, e.g., 44.84 pb$^{-1}$ for LEP). Use the following script to inspect event normalization:
+```shell
+python plots_mpl4hep.py
+```
+
+> *Exercise:* Expand the `plots_mpl4hep.py` script to plot the `muon_max_p_norm` histogram.
+
+Inspect the `cutFlow` histogram, which shows stacked event yields for all processes across different cuts. After the final cut, there are approximately $10^8$ events (signal-dominated, with backgrounds included). However, this count does not align with our earlier calculation. Why?
+
+The discrepancy arises because event normalization has not been applied. The current counts are bare (non-normalized) yields. Event normalization involves considering the cross-section (tabulated as metadata with the sample), the number of events processed, and the integrated luminosity (set by the user, e.g., 44.84 $\text{pb}^{-1}$ for LEP). Use the following script to inspect event normalization:
 
 ```shell
 python analysis.py --yields
@@ -108,15 +125,15 @@ Re-run the analysis and regenerate the plots:
 
 ```shell
 fccanalysis run z_mumu_xsec.py
-fccanalysis plots plots.py
+fccanalysis plots plots_root.py
+python plots_mpl4hep.py
 ```
 
 Adjust the y-axis scale of the `cutFlow` plot to 1e0–10e8 for better visualization. With proper normalization, the plots will now make more sense. Study each plot, compare them with the LEP paper, and evaluate whether the cuts are appropriate.
 
-### Tasks
+> *Exercise:* Run the analysis for the FCC-ee luminosity of $100\text{ ab}^{-1}$ and adapt the plot labels accordingly.
 
-1. Make appropriate plots and an event yield table for the FCC-ee luminosity.
-3. Plot the momentum distribution of each muon separately, before the 4th cut.
+> *Exercise:* Plot the momentum distribution of each muon separately, before the 4th cut.
 
 
 
@@ -161,10 +178,10 @@ python analysis.py --acceptance
 The calculated acceptance is `0.931`. This indicates that 93.1% of the total events are selected after detector effects and event selection. Scaling back the 71,744.33 selected events by the acceptance yields:
 
 ```math
-\text{Adjusted events} = \frac{71,744.33}{0.931} = 77,061.57895,
+\text{Adjusted events} = \frac{71,744.33}{0.931} = 77061.57895,
 ```
 
-which matches the initial number of generated events (modulo small numerical rounding).
+which matches the initial number of generated events (modulo small numerical roundings).
 
 The acceptance is calculated specifically for the signal process and is independent of the cross-section and luminosity. It depends, however, on the number of events generated: larger samples yield more precise acceptance calculations.
 
@@ -212,5 +229,3 @@ Using the formula and the provided scripts, compute the cross-section by followi
 1. **Compute the cross-section for LEP luminosity**: analyze the result and understand its number.
 2. **Compute the cross-section for FCC luminosity**: compare this result with the LEP cross-section.
 3. **Derive the formula for the statistical uncertainty on the cross-section**: explore how uncertainties propagate in the calculation.
-
-

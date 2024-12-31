@@ -11,7 +11,7 @@ formats        = ['png','pdf']
 outdir         = '/home/submit/jaeyserm/public_html/fccee/tutorials/z_mumu_xsec/'
 inputDir       = './output/' 
 
-plotStatUnc    = True
+plotStatUnc    = False
 
 
 
@@ -42,7 +42,7 @@ hists["cutFlow"] = {
     "xmin":     0,
     "xmax":     5,
     "ymin":     1e1,
-    "ymax":     1e11,
+    #"ymax":     1e11,
     "xtitle":   ["All events", "#geq 1 #mu", "#geq 2 #mu^{#pm}", "2 OS #mu", "p_{#mu}^{max} > 0.6 p_{beam}"],
     "ytitle":   "Events ",
     "scaleSig": 1
@@ -57,7 +57,7 @@ hists["muons_all_costheta"] = {
     "xmin":     -1,
     "xmax":     1,
     "ymin":     0.1,
-    "ymax":     1e8,
+    #"ymax":     1e8,
     "xtitle":   "cos(#theta)",
     "ytitle":   "Events",
 }
@@ -70,7 +70,7 @@ hists["muon_max_p_norm"] = {
     "xmin":     0,
     "xmax":     2,
     "ymin":     0.1,
-    "ymax":     1e8,
+    #"ymax":     1e8,
     "xtitle":   "p(#mu_{max})/E_{beam}",
     "ytitle":   "Events",
 }
@@ -83,7 +83,7 @@ hists["acolinearity"] = {
     "xmin":     0,
     "xmax":     1,
     "ymin":     1e-2,
-    "ymax":     1e8,
+    #"ymax":     1e8,
     "xtitle":   "Acolinearity (rad)",
     "ytitle":   "Events",
 }
@@ -93,11 +93,11 @@ hists["invariant_mass"] = {
     "output":   "invariant_mass",
     "logy":     True,
     "stack":    True,
-    "rebin":    10,
+    "rebin":    1,
     "xmin":     0,
     "xmax":     150,
     "ymin":     1e-3,
-    "ymax":     1e6,
+    #"ymax":     1e6,
     "xtitle":   "Invariant mass (GeV)",
     "ytitle":   "Events",
 }
