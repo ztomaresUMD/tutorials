@@ -14,10 +14,10 @@ In this tutorial, we will explore the fundamentals to measure the cross-section 
 A comprehensive summary of cross-section and luminosity definitions can be found [here](https://cds.cern.ch/record/2800578/files/Cross%20Section%20and%20Luminosity%20Physics%20Cheat%20Sheet.pdf). To summarize:
 
 - **Cross-section**: A characteristic of the physical process, measured in units of picobarn (pb), where $1 \text{ barn} = 10^{-24} \text{ cm}^2$.
-- **Instantaneous luminosity** ($\mathcal{L}$): Represents the density of particles colliding in the accelerator. Units: $\text{pb}^{-1}$s$^{-1}$ or $\text{cm}^{-2}$s$^{-1}$.
+- **Instantaneous luminosity** ($\mathcal{L}$): Represents the density of particles colliding in the accelerator. Units: $\text{pb}^{-1}\text{s}^{-1}$ or $\text{cm}^{-2}\text{s}^{-1}$.
 - **Integrated luminosity** ($\mathcal{L}_{\text{int}}$): The instantaneous luminosity integrated over time, with units of $\text{pb}^{-1}$. Typically, "luminosity" refers to integrated luminosity.
 
-For example, at the Z-pole (91 GeV), the FCCee accelerator will achieve a luminosity of $5\cdot 10^{36} \text{ cm}^{-2}\text{s}^{-1}$ and an integrated luminosity of approximately 100 $\text{ab}^{-1}$ (attobarn), corresponding to about two years of operation. In contrast, at LEP, the instantaneous and integrated luminosities were much lower, with the latter amounting to 44.84 $\text{pb}^{-1}$.
+For example, at the Z-pole (91 GeV), the FCCee accelerator will achieve a luminosity of $5\cdot 10^{36}~\text{cm}^{-2}\text{s}^{-1}$ and an integrated luminosity of approximately 100 $\text{ab}^{-1}$ (attobarn), corresponding to about two years of operation. In contrast, at LEP, the instantaneous and integrated luminosities were much lower, with the latter amounting to 44.84 $\text{pb}^{-1}$.
 
 We calculate the $Z\rightarrow\mu\mu$ production rate $R$ (events per second) using a cross-section of 1717.85 pb (obtained from theoretical calulations and confirmed with measurements at LEP):
 
@@ -69,7 +69,7 @@ cd mit-fcc/tutorials/03_CrossSection
 source /work/submit/jaeyserm/software/FCCAnalyses/setup.sh
 ```
 
-The samples, analysis logic, cuts, and histograms are defined in the `z_mumu_xsec.py` file. For this analysis, the signal sample is $Z \rightarrow \mu\mu$ (`wzp6_ee_mumu_ecm91p2`), and the backgrounds are `wzp6_ee_tautau_ecm91p2` and `p8_ee_gaga_mumu_ecm91p2`. The terminology for the sample names is as follows: `wzp6` means the Whizard event generator coupled to Pythia 6 for the hadronisation; `ee` means electron-positron initial state; `mumu` means the acual process, i.e. 2 muons (see lectures for the different processes and Feynman diagrams that can occur at the Z pole) and `ecm91p2` is the center-of-mass energy of 91.2 GeV (the Z pole). `p8` means the Pythia 8 event generator and hadronisation. Other event generators are also available such as `KKMCee` or `MadGraph`.
+The samples, analysis logic, cuts, and histograms are defined in the `z_mumu_xsec.py` file. For this analysis, the signal sample is $Z \rightarrow \mu\mu$ (`wzp6_ee_mumu_ecm91p2`), and the backgrounds are `wzp6_ee_tautau_ecm91p2` and `p8_ee_gaga_mumu_ecm91p2`. The terminology for the sample names is as follows: `wzp6` means the Whizard event generator coupled to Pythia 6 for the hadronisation; `ee` means electron-positron initial state; `mumu` means the acual process, i.e. 2 muons (see lectures for the different processes and Feynman diagrams that can occur at the Z pole) and `ecm91p2` is the center-of-mass energy of 91.2 GeV (the Z pole). `p8` means the Pythia 8 event generator and hadronisation. Other event generators are also available such as `KKMCee` or `MadGraph`. Event generators differ by their theoretical implementation of the physical process or different numerical methods to evaluate the mathematical expressions.
 
 We'll adopt the following cuts, inspired by the reference paper above:
 
@@ -156,17 +156,17 @@ When measuring the cross-section, the goal is to determine the generation-level 
 Acceptance ($A$) is defined as:
 
 $$
-A = \frac{n_{\text{selected}}}{n_{\text{total}}},
+A = \frac{n_{\text{sel}}}{n_{\text{total}}},
 $$
 
 where:
 
-- $n_{\text{selected}}$: Total number of selected events (not objects or muons!) after all selections and detector simulation.
+- $n_{\text{sel}}$: Total number of selected events (not objects or muons!) after all selections and detector simulation.
 - $n_{\text{total}}$: Total number of generated events (measured before any cuts).
 
 In our analysis, the acceptance can be derived from the cutFlow table:
 
-- The last bin represents $n_{\text{selected}}$ (total selected events).
+- The last bin represents $n_{\text{sel}}$ (total selected events).
 - The first bin represents $n_{\text{total}}$ (total generated events).
 
 To calculate the acceptance, use the following script:
@@ -175,7 +175,7 @@ To calculate the acceptance, use the following script:
 python analysis.py --acceptance
 ```
 
-The calculated acceptance is `0.931`. This indicates that 93.1% of the total events are selected after detector effects and event selection. Scaling back the 71,744.33 selected events by the acceptance yields:
+The calculated acceptance is `0.931`. This indicates that 93.1% of the total events are selected after detector effects and event selection. Scaling back the 71744.33 selected events by the acceptance yields:
 
 ```math
 \text{Adjusted events} = \frac{71,744.33}{0.931} = 77061.57895,
